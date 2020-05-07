@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
+import uuid from 'uuid-random';
 import './App.css';
 
 class App extends React.Component {
@@ -23,12 +24,12 @@ class App extends React.Component {
   }
 
   handleSubmit = (e) => {
-    //prevent the submited forms shows quickly
+    //prevent the submited form show quickly
     e.preventDefault();
     
     const { task, description, date, complete } = this.state;
-    const list = { task, description, date, complete };
-    const lists = this.state.lists.concat(list)
+    const list = { id: uuid(), task, description, date, complete };
+    const lists = this.state.lists.concat(list);
 
     this.setState({
       lists,
@@ -74,8 +75,17 @@ class App extends React.Component {
             name="complete"
             id="complete"
           />                    
-          <button type="submit">Submit</button>    
+          <button onClick={e => this.handleSubmit(e)}>Submit</button>    
         </form>
+        {this.state.lists.map(el => {
+          return(
+            <ul className="list" key={el.id}>
+              <li>{el.task}</li>
+              <li>{el.description}</li>
+              <li>{el.complete ? 'Task done' : 'Task to be completed'}</li>
+            </ul>
+          )
+        })}
       </div>
     );
   }
